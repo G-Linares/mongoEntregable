@@ -1,0 +1,162 @@
+--- crea la base de datos llamada entragable ---
+use entregable
+
+--- insertamos objetos ---
+
+db.productos.insertMany([
+  {
+    "title": "Escuadra",
+    "price": 120,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+  },
+  {
+    "title": "Calculadora",
+    "price": 580,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+  },
+  {
+    "title": "Globo Terráqueo",
+    "price": 900,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+  },
+  {
+    "title": "Mochila",
+    "price": 1280,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+  },
+  {
+    "title": "Plumon",
+    "price": 1700,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+  },
+   {
+    "title": "Regla",
+    "price": 2300,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+  },
+   {
+    "title": "Sacapuntas",
+    "price": 2860,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+  },
+    {
+    "title": "Lapiz rojo",
+    "price": 3350,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+  },
+  {
+    "title": "Lentes",
+    "price": 4320,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png",
+  },
+   {
+    "title": "Zapatos",
+    "price": 4990,
+    "thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png",
+  },
+])
+
+--- insertamos mensajes ---
+
+db.mensajes.insertMany([
+  {
+    "sender": "Miguel",
+    "timestamp": "12 Feb 2022",
+    "message": "Esto es una prueba",
+  },
+   {
+    "sender": "Andres",
+    "timestamp": "12 Mar 2022",
+    "message": "Esto no es una prueba",
+  },
+   {
+    "sender": "Sandra",
+    "timestamp": "15 Mar 2022",
+    "message": "Esto quizas es una prueba",
+  },
+   {
+    "sender": "Maria",
+    "timestamp": "12 Jun 2022",
+    "message": "Esto creo que no es una prueba",
+  },
+   {
+    "sender": "Carla",
+    "timestamp": "12 Jun 2022",
+    "message": "Esto seguramente si es una prueba",
+  },
+   {
+    "sender": "Jose",
+    "timestamp": "12 Jun 2022",
+    "message": "Esto muy probablemente no sea una prueba",
+  },
+   {
+    "sender": "Andres",
+    "timestamp": "23 Oct 2022",
+    "message": "Esto es una prueba?",
+  },
+   {
+    "sender": "Gerardo",
+    "timestamp": "23 Oct 2022",
+    "message": "Que es una prueba?",
+  },
+   {
+    "sender": "Maria",
+    "timestamp": "01 Dic 2022",
+    "message": "quien dijo que esto era una prueba?",
+  },
+   {
+    "sender": "Juan",
+    "timestamp": "09 Ene 2022",
+    "message": "Esto es una prueba!",
+  },
+])
+
+--- encontrar todos los items --- 
+db.productos.find()
+db.mensajes.find()
+
+--- listar numero de todos los items --- 
+db.productos.count()
+db.mensajes.count()
+
+--- Agregar un producto a objetos 
+db.productos.insertOne(
+  {
+    "title": "Nuevo Objeto",
+  	"price": 101,
+  	"thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png"
+  }
+)
+
+
+--- Encontrar productos con precio menor a 1000 --
+db.productos.find({ price : { $lt : 1000 }}).pretty()
+
+--- Encontrar productos con precio entre 3000 y 1000 
+db.productos.find({price:{ $gt :  1000, $lt : 3000}}).pretty()
+
+--- Encontrar productos mayor precio a 3000 --
+db.productos.find({ price : { $gt : 3000 }}).pretty()
+
+--- Encontrar 3er producto mas barato ---
+db.productos.find({},{"price":1, "title":1, _id:0}).sort({"price":1}).skip(2).limit(1)
+
+--- Agregarles un Stock de 100 a todos ---
+db.productos.updateMany({}, { $set: {"stock": 100} }, false, true )
+
+-- Cambiar stock a 0 cuando producto cueste mas de 4000 
+db.productos.updateMany({ price:{$gt:4000}},{$set: {"stock": 0} },false,true)
+
+-- Eliminar elementos con precio menor a 1000 ---
+db.productos.deleteMany({price:{$lt:1000}})
+
+--- crear un usuario solo read ---
+db.createUser(
+  {
+    user: "pepe",
+    pwd: "asd456",
+    roles: [
+       { role: "read", db: "entregable" }
+    ]
+  }
+)
